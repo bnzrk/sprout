@@ -1,0 +1,11 @@
+*          text=auto
+
+*.cs       text diff=csharp
+*.cshtml   text diff=html
+*.csx      text diff=csharp
+*.sln      text eol=crlf
+*.csproj   text eol=crlf
+*.html   text diff=html
+*.css    text
+*.js     text
+*.sql    text

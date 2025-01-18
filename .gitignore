@@ -1,0 +1,17 @@
+Sprout.Web/wwwroot/files/dictionary/
+**/appsettings.json
+**/appsettings.Development.json
+/build/
+*.suo
+*.user
+*.sdf
+bin/
+obj/
+Debug/
+Release/
+*.opensdf
+*.tlog
+*.log
+launch.json
+.vscode
+.vs

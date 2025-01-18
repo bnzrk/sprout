@@ -1,0 +1,17 @@
+﻿@model List<Kanji>
+@{
+    ViewData["Title"] = "Dictionary";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Kanji</h1>
+    <table>
+        @foreach (var kanji in Model)
+        {
+            <tr>
+                <td>@kanji.Literal</td>
+            </tr>
+        }
+    </table>
+    
+</div>
