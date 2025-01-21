@@ -10,7 +10,7 @@ using Sprout.Web.Data;
 
 namespace Sprout.Web.Migrations
 {
-    [DbContext(typeof(KanjiContext))]
+    [DbContext(typeof(ApplicationContext))]
     [Migration("20250118000350_InitialCreate")]
     partial class InitialCreate
     {

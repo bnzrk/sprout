@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IKanjiRepository, KanjiRepository>();
 builder.Services.AddScoped<IKanjiService, KanjiService>();
-builder.Services.AddDbContext<KanjiContext>(cfg =>
+builder.Services.AddDbContext<ApplicationContext>(cfg =>
 {
     cfg.UseSqlServer();
 });

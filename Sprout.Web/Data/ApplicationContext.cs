@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Sprout.Web.Data.Entities.Kanji;
+using Sprout.Web.Data.Entities.Srs;
 
 namespace Sprout.Web.Data
 {
-    public class KanjiContext : DbContext
+    public class ApplicationContext : DbContext
     {
-        public KanjiContext(IConfiguration config)
+        public ApplicationContext(IConfiguration config)
         {
             _config = config;
         }
@@ -13,6 +14,7 @@ namespace Sprout.Web.Data
         private readonly IConfiguration _config;
 
         public DbSet<Kanji> Kanji { get; set; }
+        public DbSet<SrsData> SrsData { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

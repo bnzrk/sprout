@@ -9,7 +9,7 @@ using Sprout.Web.Data;
 
 namespace Sprout.Web.Migrations
 {
-    [DbContext(typeof(KanjiContext))]
+    [DbContext(typeof(ApplicationContext))]
     partial class KanjiContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

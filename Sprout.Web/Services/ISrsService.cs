@@ -6,5 +6,6 @@ namespace Sprout.Web.Services
     {
         Task<SrsData> GetSrsDataByIdAsync(int id);
         Task UpdateSrsProgressAsync(int srsId, bool isCorrect);
+        DateTime GetNextReviewDate(SrsData srsData);
     }
 }

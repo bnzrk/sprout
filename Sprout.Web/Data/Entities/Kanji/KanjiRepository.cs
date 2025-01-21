@@ -4,12 +4,12 @@ namespace Sprout.Web.Data.Entities.Kanji
 {
     public class KanjiRepository : IKanjiRepository
     {
-        public KanjiRepository(KanjiContext context) 
+        public KanjiRepository(ApplicationContext context) 
         {
             _context = context;
         }
 
-        private readonly KanjiContext _context;
+        private readonly ApplicationContext _context;
 
         public async Task DeleteKanjiAsync(Kanji kanji)
         {
