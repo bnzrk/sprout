@@ -1,31 +1,35 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Sprout.Web.Contracts;
+using Sprout.Web.Services;
 
 namespace Sprout.Web.Controllers
 {
     [ApiController]
     [Route("api/v1/srs")]
-    public class SRSController : Controller
+    public class SrsController : Controller
+
     {
-        public IActionResult Index()
+        private readonly ISrsService _srsService;
+
+        public SrsController(ISrsService srsService)
         {
-            return View();
+            _srsService = srsService;
         }
 
         [HttpPost("review")]
-        public async Task<IActionResult> ReviewCard([FromBody] ReviewDTO reviewResult)
+        public async Task<IActionResult> ReviewItem([FromBody] ReviewDTO reviewResult)
         {
-            if (reviewResult == null || reviewResult.SRSId < 0)
+            if (reviewResult == null || reviewResult.SrsId < 0)
             {
                 return BadRequest("Invalid review.");
             }
 
             try
             {
-                //_srsService.UpdateSRSProgress(reviewResult.SRSId, reviewResult.IsCorrect);
+                await _srsService.UpdateSrsProgressAsync(reviewResult.SrsId, reviewResult.IsCorrect);
                 return Ok(new { message = "Review processed successfully." });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(500, new { message = "An error occured while attempting to process a review." });
             }

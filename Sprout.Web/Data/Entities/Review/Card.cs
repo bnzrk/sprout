@@ -1,7 +1,7 @@
 ﻿using Sprout.Web.Controllers;
-using Sprout.Web.Data.Entities.SRS;
+using Sprout.Web.Data.Entities.Srs;
 
-namespace Sprout.Web.Data.Entities.Card
+namespace Sprout.Web.Data.Entities.Review
 {
     public class Card
     {
@@ -9,6 +9,6 @@ namespace Sprout.Web.Data.Entities.Card
         public int DeckId { get; set; }
         public string Kanji { get; set; }
         public Deck Deck { get; set; }
-        public SRSData SRSData { get; set; }
+        public SrsData SrsData { get; set; }
     }
 }

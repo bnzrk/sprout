@@ -2,7 +2,7 @@
 {
     public class ReviewDTO
     {
-        public int SRSId { get; set; }
+        public int SrsId { get; set; }
         public bool IsCorrect { get; set; }
     }
 }

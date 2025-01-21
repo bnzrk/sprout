@@ -1,6 +1,6 @@
-﻿namespace Sprout.Web.Data.Entities.SRS
+﻿namespace Sprout.Web.Data.Entities.Srs
 {
-    public class SRSData
+    public class SrsData
     {
         public int Id { get; set; }
         public int CardId { get; set; }
