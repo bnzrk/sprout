@@ -5,8 +5,8 @@ namespace Sprout.Web.Services
     public class SrsService : ISrsService
     {
         private readonly ISrsDataRepository _repository;
-        private const int Bins = 12; // NOTE: Temporary value for calculating repitition spacing
-        private const int IncrementBase = 2;
+        public const int Bins = 12; // NOTE: Temporary value for calculating repitition spacing
+        public const int IncrementBase = 2;
 
         public SrsService(ISrsDataRepository repository)
         {
@@ -44,7 +44,7 @@ namespace Sprout.Web.Services
             srsData.LastReviewed = DateTime.Now;
             srsData.NextReview = GetNextReviewDate(srsData);
 
-            await _repository.SaveAllAsync();
+            await _repository.UpdateSrsDataAsync(srsData);
         }
 
         public DateTime GetNextReviewDate(SrsData srsData)

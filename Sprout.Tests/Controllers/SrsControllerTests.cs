@@ -1,14 +1,7 @@
-﻿using Xunit;
-using Moq;
+﻿using Moq;
 using Sprout.Web.Controllers;
 using Sprout.Web.Services;
-using Sprout.Web.Data.Entities.Kanji;
-using Sprout.Web.Models;
-using System.Threading.Tasks;
-using System.Globalization;
-using System.Runtime.InteropServices;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Client;
 using Sprout.Web.Contracts;
 using Microsoft.AspNetCore.Http;
 
@@ -20,8 +13,11 @@ namespace Sprout.Tests.Controllers
         [Fact]
         public async Task ReviewItem_NullReviewResult_ReturnsBadRequest()
         {
+            // Arrange
             var mockSrsService = new Mock<ISrsService>();
             var srsController = new SrsController(mockSrsService.Object);
+
+            // Act
             var result = await srsController.ReviewItem(null);
 
             // Assert
@@ -32,6 +28,7 @@ namespace Sprout.Tests.Controllers
         [Fact]
         public async Task ReviewItem_InvalidId_ReturnsBadRequest()
         {
+            // Arrange
             var mockSrsService = new Mock<ISrsService>();
             var srsController = new SrsController(mockSrsService.Object);
             var review = new ReviewDTO
@@ -39,6 +36,8 @@ namespace Sprout.Tests.Controllers
                 SrsId = -1,
                 IsCorrect = true
             };
+
+            // Act
             var result = await srsController.ReviewItem(review);
 
             // Assert
@@ -49,6 +48,7 @@ namespace Sprout.Tests.Controllers
         [Fact]
         public async Task ReviewItem_ValidReview_ReturnsOk()
         {
+            // Arrange
             var review = new ReviewDTO
             {
                 SrsId = 1,
@@ -59,6 +59,8 @@ namespace Sprout.Tests.Controllers
                 .Setup(service => service.UpdateSrsProgressAsync(review.SrsId, review.IsCorrect))
                 .Returns(Task.CompletedTask);
             var srsController = new SrsController(mockSrsService.Object);
+
+            //Act
             var result = await srsController.ReviewItem(review);
 
             // Assert
@@ -70,6 +72,7 @@ namespace Sprout.Tests.Controllers
         [Fact]
         public async Task ReviewItem_ServiceThrowsException_ReturnsInternalServerError()
         {
+            // Arrange
             var review = new ReviewDTO
             {
                 SrsId = 1,
@@ -81,6 +84,7 @@ namespace Sprout.Tests.Controllers
                 .ThrowsAsync(new Exception("Service error"));
             var srsController = new SrsController(mockSrsService.Object);
 
+            // Act
             var result = await srsController.ReviewItem(review);
 
             // Assert

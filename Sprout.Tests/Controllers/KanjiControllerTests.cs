@@ -1,12 +1,7 @@
-﻿using Xunit;
-using Moq;
+﻿using Moq;
 using Sprout.Web.Controllers;
 using Sprout.Web.Services;
 using Sprout.Web.Data.Entities.Kanji;
-using Sprout.Web.Models;
-using System.Threading.Tasks;
-using System.Globalization;
-using System.Runtime.InteropServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Sprout.Tests.Controllers
@@ -16,6 +11,7 @@ namespace Sprout.Tests.Controllers
         [Fact]
         public async void GetKanjiByLiteral_ReturnsOk_WhenKanjiExists()
         {
+            // Arrange
             var literal = "芽";
             var meanings = new List<string> { "bud", "sprout", "spear", "germ" };
             var kunReadings = new List<string> { "め" };
@@ -46,10 +42,14 @@ namespace Sprout.Tests.Controllers
                 .ReturnsAsync(kanji);
 
             var controller = new KanjiController(mockService.Object);
+
+            // Act
             var result = await controller.GetByLiteral(literal);
 
             var okResult = Assert.IsType<OkObjectResult>(result);
             var returnedKanji = Assert.IsType<Kanji>(okResult.Value);
+
+            // Assert
             Assert.Equal(literal, returnedKanji.Literal);
             Assert.Equal(meanings, returnedKanji.Meanings);
             Assert.Equal(kunReadings, returnedKanji.KunReadings);
