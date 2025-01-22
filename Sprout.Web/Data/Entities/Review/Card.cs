@@ -6,9 +6,8 @@ namespace Sprout.Web.Data.Entities.Review
     public class Card
     {
         public int Id { get; set; }
-        public int DeckId { get; set; }
         public string Kanji { get; set; }
-        public Deck Deck { get; set; }
+        public ICollection<Deck> Decks { get; set; }
         public SrsData SrsData { get; set; }
     }
 }

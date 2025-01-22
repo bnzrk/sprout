@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Sprout.Web.Data.Entities.Kanji;
 using Sprout.Web.Data.Entities.Srs;
+using Sprout.Web.Data.Entities.Review;
 
 namespace Sprout.Web.Data
 {
@@ -26,6 +27,21 @@ namespace Sprout.Web.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Kanji>()
+                .HasIndex(k => k.Literal)
+                .IsUnique();
+
+            modelBuilder.Entity<Card>()
+                .HasMany(c => c.Decks)
+                .WithMany(d => d.Cards)
+                .UsingEntity(
+                    "CardDeck",
+                    l => l.HasOne(typeof(Deck)).WithMany().HasForeignKey("DecksId").HasPrincipalKey(nameof(Deck.Id)),
+                    r => r.HasOne(typeof(Card)).WithMany().HasForeignKey("CardsId").HasPrincipalKey(nameof(Card.Id)),
+                    j => j.HasKey("CardsId", "TagsId"))
+                .HasIndex(c => c.Kanji)
+                .IsUnique();
         }
     }
 }
