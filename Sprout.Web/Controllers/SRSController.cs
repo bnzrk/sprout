@@ -34,5 +34,16 @@ namespace Sprout.Web.Controllers
                 return StatusCode(500, new { message = "An error occured while attempting to process a review." });
             }
         }
+
+        [HttpGet("{srsId}")]
+        public async Task<IActionResult> GetSrsData(int srsId)
+        {
+            var srsData = await _srsService.GetSrsDataByIdAsync(srsId);
+            if (srsData == null)
+            {
+                return NotFound();
+            }
+            return Ok(srsData);
+        }
     }
 }
