@@ -35,18 +35,18 @@ namespace Sprout.Web.Controllers
         [HttpGet("due")]
         public async Task<IActionResult> GetDueCards()
         {
-            var dueCard = await _cardService.GetDueCardsAsync();
-            if (dueCard == null || dueCard.Count == 0)
+            var dueCards = await _cardService.GetDueCardsAsync(DateTime.Now);
+            if (dueCards == null || dueCards.Count == 0)
             {
                 return NotFound();
             }
-            return Ok(dueCard);
+            return Ok(dueCards);
         }
 
         [HttpGet("review-summary")]
         public async Task<IActionResult> GetReviewSummary()
         {
-            var summary = await _cardService.GetReviewSummaryAsync();
+            var summary = await _cardService.GetReviewSummaryAsync(DateTime.Now);
             if (summary == null)
             {
                 return NotFound();
