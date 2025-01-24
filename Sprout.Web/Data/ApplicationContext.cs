@@ -17,6 +17,7 @@ namespace Sprout.Web.Data
         public DbSet<Kanji> Kanji { get; set; }
         public DbSet<SrsData> SrsData { get; set; }
         public DbSet<Card> Cards { get; set; }
+        public DbSet<Deck> Decks { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
