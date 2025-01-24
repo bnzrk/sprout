@@ -41,7 +41,7 @@ namespace Sprout.Web.Data
                     l => l.HasOne(typeof(Deck)).WithMany().HasForeignKey("DecksId").HasPrincipalKey(nameof(Deck.Id)),
                     r => r.HasOne(typeof(Card)).WithMany().HasForeignKey("CardsId").HasPrincipalKey(nameof(Card.Id)),
                     j => j.HasKey("CardsId", "TagsId"))
-                .HasIndex(c => c.Kanji)
+                .HasIndex(c => new { c.Kanji, c.UserId })
                 .IsUnique();
         }
     }
