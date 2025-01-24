@@ -3,7 +3,7 @@
     public interface ICardRepository
     {
         Task SaveCardAsync(Card card);
-        Task SaveCardList(List<Card> card);
+        Task SaveCardListAsync(List<Card> cardList);
         Task UpdateCardAsync(Card card);
         Task DeleteCardAsync(Card card);
         Task<IEnumerable<Card>> GetCardsWithoutReviewAsync();

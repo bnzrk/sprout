@@ -6,6 +6,6 @@
         public string UserId { get; set; }
         public string Name { get; set; }
         public DateTime CreatedAt { get; set; }
-        public ICollection<Card> Cards { get; set; }
+        public ICollection<Card> Cards { get; set; } = new List<Card>();
     }
 }

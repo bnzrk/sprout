@@ -7,7 +7,7 @@ namespace Sprout.Web.Data.Entities.Review
     {
         public int Id { get; set; }
         public string Kanji { get; set; }
-        public ICollection<Deck> Decks { get; set; }
+        public ICollection<Deck> Decks { get; set; } = new List<Deck>();
         public SrsData SrsData { get; set; }
     }
 }
