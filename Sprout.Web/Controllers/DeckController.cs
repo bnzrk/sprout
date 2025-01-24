@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Sprout.Web.Contracts;
 using Sprout.Web.Services;
 
 namespace Sprout.Web.Controllers
 {
+    // TODO: Replace BadRequest with appropriate responses
     [ApiController]
     [Route("api/v1/decks")]
     public class DeckController : Controller
@@ -20,8 +20,10 @@ namespace Sprout.Web.Controllers
         [HttpPost("{name}")]
         public async Task<IActionResult> CreateDeck(string name)
         {
-            await _deckService.CreateDeckAsync(name);
-            return Ok("Deck created successfully");
+            // TODO: Use auth token to get user from user microservice
+            string userId = "";
+            int deckId = await _deckService.CreateDeckAsync(userId, name);
+            return CreatedAtAction(nameof(GetDeck), new { id = deckId }, null);
         }
 
         [HttpGet("{id}")]
@@ -36,89 +38,83 @@ namespace Sprout.Web.Controllers
         }
 
         [HttpGet("{id}/due")]
-        public async Task<IActionResult> GetDueCards(int id)
+        public async Task<IActionResult> GetDeckDueCards(int id)
         {
-            var deck = await _deckService.GetDeckByIdAsync(id);
-            if (deck == null)
+            try
             {
-                return NotFound();
+                var dueCards = await _deckService.GetDeckDueCardsAsync(id, DateTime.Now);
+                return Ok(dueCards);
             }
-            var dueCards = await _deckService.GetDueCardsAsync(id, DateTime.Now);
-            if (dueCards == null)
+            catch (Exception ex)
             {
-                return NotFound();
+                return BadRequest(ex.Message);
             }
-            return Ok(dueCards);
         }
 
         [HttpPost("{id}/add/{kanji}")]
-        public async Task<IActionResult> AddCard(int id, string kanji)
+        public async Task<IActionResult> AddCardToDeck(int id, string kanji)
         {
-            var deck = await _deckService.GetDeckByIdAsync(id);
-            if (deck == null)
+            try
             {
-                return NotFound();
+                var deck = await _deckService.GetDeckByIdAsync(id);
+                var card = await _cardService.GetCardbyKanjiAsync(kanji);
+                await _deckService.AddCardToDeckAsync(deck, card);
+                return Ok("Card added to deck successfully.");
             }
-            var card = await _cardService.GetCardbyKanjiAsync(kanji);
-            if (card == null)
+            catch (Exception ex)
             {
-                return NotFound();
+                return BadRequest(ex.Message);
             }
-            await _deckService.AddCardAsync(deck, card);
-            return Ok("Card added to deck successfully.");
         }
 
         [HttpDelete("{id}/remove/{kanji}")]
-        public async Task<IActionResult> RemoveCard(int id, string kanji)
+        public async Task<IActionResult> RemoveCardFromDeck(int id, string kanji)
         {
-            var deck = await _deckService.GetDeckByIdAsync(id);
-            if (deck == null)
+            try
             {
-                return NotFound();
+                var deck = await _deckService.GetDeckByIdAsync(id);
+                var card = await _cardService.GetCardbyKanjiAsync(kanji);
+                await _deckService.RemoveCardFromDeckAsync(deck, card);
+                return Ok("Card removed from deck successfully.");
             }
-            var card = await _cardService.GetCardbyKanjiAsync(kanji);
-            if (card == null)
+            catch (Exception ex)
             {
-                return NotFound();
-            }
-            await _deckService.RemoveCardAsync(deck, card);
-            return Ok("Card removed from deck successfully.");
+                return BadRequest(ex.Message);
+            }   
         }
 
         [HttpPut("{id}/rename/{name}")]
-        public async Task<IActionResult> Rename(int id, string name)
+        public async Task<IActionResult> RenameDeck(int id, string name)
         {
-            var deck = await _deckService.GetDeckByIdAsync(id);
-            if (deck == null)
+            try
             {
-                return NotFound();
+                var deck = await _deckService.GetDeckByIdAsync(id);
+                await _deckService.RenameDeckAsync(deck, name);
+                return StatusCode(204, "Deck created successfully.");
             }
-            await _deckService.RenameDeckAsync(deck, name);
-            return Ok("Deck named successfully.");
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
         }
 
         [HttpGet("{id}/review-summary")]
-        public async Task<IActionResult> GetReviewSummary(int id)
+        public async Task<IActionResult> GetDeckReviewSummary(int id)
         {
-            var deck = await _deckService.GetDeckByIdAsync(id);
-            if (deck == null)
+            try
             {
-                return NotFound("Deck could not be found.");
-            }
-
-            var dueCards = (await _deckService.GetDueCardsAsync(id, DateTime.Now)).ToList();
-            var newCards = (await _deckService.GetNewCardsAsync(id, DateTime.Now)).ToList();
-
-            var summary = new DeckReviewSummaryDTO
-            {
-                DeckName = deck.Name,
-                CardReviewSummary = new CardReviewSummaryDTO
+                var summary = await _deckService.GetDeckReviewSummaryAsync(id, DateTime.Now);
+                if (summary == null)
                 {
-                    Due = dueCards.Count,
-                    New = newCards.Count
+                    return NotFound();
                 }
-            };
-            return Ok(summary);
+                return Ok(summary);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
