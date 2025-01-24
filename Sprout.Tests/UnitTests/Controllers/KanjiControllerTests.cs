@@ -4,7 +4,7 @@ using Sprout.Web.Services;
 using Sprout.Web.Data.Entities.Kanji;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Sprout.Tests.Controllers
+namespace Sprout.Tests.UnitTests.Controllers
 {
     public class KanjiControllerTests
     {

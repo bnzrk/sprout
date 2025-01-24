@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Sprout.Web.Contracts;
 using Microsoft.AspNetCore.Http;
 
-namespace Sprout.Tests.Controllers
+namespace Sprout.Tests.UnitTests.Controllers
 {
     public class SrsControllerTests
     {

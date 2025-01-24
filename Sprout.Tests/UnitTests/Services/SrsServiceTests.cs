@@ -2,7 +2,7 @@
 using Sprout.Web.Services;
 using Sprout.Web.Data.Entities.Srs;
 
-namespace Sprout.Tests.Services
+namespace Sprout.Tests.UnitTests.Services
 {
     public class SrsServiceTests
     {
