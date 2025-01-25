@@ -1,16 +1,15 @@
 ﻿using Sprout.Web.Data.Entities.Review;
 
-namespace Sprout.Web.Data.Entities.Srs
+namespace Sprout.Web.Contracts
 {
-    public class SrsData
+    public class SrsDataDto
     {
-        public int Id { get; set; }
-        public int CardId { get; set; }
-        public int ProgressLevel { get; set; } = 1;
+        required public int Id { get; set; }
+        required public int CardId { get; set; }
+        required public int ProgressLevel { get; set; } = 1;
         public DateTime? FirstReview { get; set; }
         public DateTime? LastReview { get; set; }
         public DateTime? NextReview { get; set; }
         public bool IsMastered { get; set; } = false;
-        public Card Card { get; set; }
     }
 }

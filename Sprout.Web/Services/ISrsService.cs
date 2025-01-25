@@ -1,11 +1,10 @@
-﻿using Sprout.Web.Data.Entities.Srs;
+﻿using Sprout.Web.Contracts;
 
 namespace Sprout.Web.Services
 {
     public interface ISrsService
     {
-        Task<SrsData> GetSrsDataByIdAsync(int id);
+        Task<SrsDataDto> GetSrsDataByIdAsync(int srsDataId);
         Task UpdateSrsProgressAsync(int srsId, bool isCorrect);
-        DateTime GetNextReviewDate(SrsData srsData);
     }
 }

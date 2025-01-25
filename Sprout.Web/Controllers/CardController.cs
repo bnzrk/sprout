@@ -17,7 +17,7 @@ namespace Sprout.Web.Controllers
         [HttpGet("{kanji}")]
         public async Task<IActionResult> GetCard(string kanji)
         {
-            var card = await _cardService.GetCardbyKanjiAsync(kanji);
+            var card = await _cardService.GetCardByKanjiAsync(kanji);
             if (card == null)
             {
                 return NotFound();
@@ -25,8 +25,8 @@ namespace Sprout.Web.Controllers
             return Ok(card);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateCard([FromBody] string kanji)
+        [HttpPost("{kanji}")]
+        public async Task<IActionResult> CreateCard(string kanji)
         {
             await _cardService.CreateCardAsync(kanji);
             return Ok("Card created successfully.");

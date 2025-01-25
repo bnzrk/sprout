@@ -1,6 +1,6 @@
 ﻿namespace Sprout.Web.Contracts
 {
-    public class CardReviewSummaryDTO
+    public class CardReviewSummaryDto
     {
         public int Due { get; set; }
         public int New { get; set; }

@@ -1,4 +1,5 @@
-﻿using Sprout.Web.Contracts;
+﻿using Sprout.Web.Mappings;
+using Sprout.Web.Contracts;
 using Sprout.Web.Data.Entities.Review;
 using Sprout.Web.Data.Entities.Srs;
 
@@ -7,22 +8,19 @@ namespace Sprout.Web.Services
     public class CardService : ICardService
     {
         private readonly ICardRepository _cardRepository;
+        private readonly IMapper _mapper;
 
-        public CardService(ICardRepository cardRepository)
+        public CardService(ICardRepository cardRepository, IMapper mapper)
         {
             _cardRepository = cardRepository;
+            _mapper = mapper;
         }
 
         public async Task CreateCardAsync(string kanjiLiteral)
         {
-            var existingCard = _cardRepository.GetCardByKanjiAsync(kanjiLiteral);
-            if (existingCard != null)
-            {
-                throw new Exception("Card already exists.");
-            }
-
             var card = new Card
             {
+                UserId = "test-user-id",
                 Kanji = kanjiLiteral,
                 SrsData = new SrsData()
             };
@@ -30,46 +28,53 @@ namespace Sprout.Web.Services
             await _cardRepository.SaveCardAsync(card);
         }
 
-        public async Task DeleteCardAsync(Card card)
+        public async Task DeleteCardAsync(int cardId)
         {
+            var card = await _cardRepository.GetCardByIdAsync(cardId);
+            if (card == null)
+            {
+                return;
+            }
             await _cardRepository.DeleteCardAsync(card);
         }
 
-        public async Task<Card> GetCardByIdAsync(int cardId)
+        public async Task<CardDto> GetCardByIdAsync(int cardId)
         {
             var card = await _cardRepository.GetCardByIdAsync(cardId);
             if (card == null)
             {
                 throw new Exception("Card not found.");
             }
-            return card;
+            return _mapper.MapCardToDto(card);
         }
 
-        public async Task<Card> GetCardbyKanjiAsync(string kanjiLiteral)
+        public async Task<CardDto> GetCardByKanjiAsync(string kanjiLiteral)
         {
             var card = await _cardRepository.GetCardByKanjiAsync(kanjiLiteral);
             if (card == null)
             {
                 throw new Exception("Card not found.");
             }
-            return card;
+            return _mapper.MapCardToDto(card);
         }
 
-        public async Task<List<Card>> GetDueCardsAsync(DateTime dueDateTime)
+        public async Task<List<CardDto>> GetDueCardsAsync(DateTime dueDateTime)
         {
             var newCards = (await _cardRepository.GetCardsWithoutReviewAsync()).ToList();
             var dueCards = (await _cardRepository.GetCardsDueOnAsync(dueDateTime)).ToList();
 
             dueCards.AddRange(newCards);
-            return dueCards;
+
+            List<CardDto> cardDtos = dueCards.Select(card => _mapper.MapCardToDto(card)).ToList();
+            return cardDtos;
         }
 
-        public async Task<CardReviewSummaryDTO> GetReviewSummaryAsync(DateTime dueDateTime)
+        public async Task<CardReviewSummaryDto> GetReviewSummaryAsync(DateTime dueDateTime)
         {
             var newCards = (await _cardRepository.GetCardsWithoutReviewAsync()).ToList();
             var dueCards = (await _cardRepository.GetCardsDueOnAsync(dueDateTime)).ToList();
 
-            var summary = new CardReviewSummaryDTO
+            var summary = new CardReviewSummaryDto
             {
                 New = newCards.Count,
                 Due = dueCards.Count

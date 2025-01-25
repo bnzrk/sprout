@@ -1,4 +1,5 @@
-﻿using Sprout.Web.Contracts;
+﻿using Sprout.Web.Mappings;
+using Sprout.Web.Contracts;
 using Sprout.Web.Data.Entities.Review;
 
 namespace Sprout.Web.Services
@@ -6,14 +7,24 @@ namespace Sprout.Web.Services
     public class DeckService : IDeckService
     {
         private readonly IDeckRepository _deckRepository;
+        private readonly ICardRepository _cardRepository;
+        private readonly IMapper _mapper;
 
-        public DeckService(IDeckRepository deckRepository)
+        public DeckService(IDeckRepository deckRepository, ICardRepository cardRepository, IMapper mapper)
         {
             _deckRepository = deckRepository;
+            _cardRepository = cardRepository;
+            _mapper = mapper;
         }
 
-        public async Task AddCardToDeckAsync(Deck deck, Card card)
+        public async Task AddCardToDeckAsync(int deckId, int cardId)
         {
+            var deck = await _deckRepository.GetDeckByIdAsync(deckId);
+            var card = await _cardRepository.GetCardByIdAsync(cardId);
+            if (deck == null || card == null)
+            {
+                return;
+            }
             deck.Cards.Add(card);
             await _deckRepository.UpdateDeckAsync(deck);
             await _deckRepository.SaveAllAsync();
@@ -31,22 +42,27 @@ namespace Sprout.Web.Services
             return deck.Id;
         }
 
-        public async Task DeleteDeckAsync(Deck deck)
+        public async Task DeleteDeckAsync(int deckId)
         {
+            var deck = await _deckRepository.GetDeckByIdAsync(deckId);
+            if (deck == null)
+            {
+                return;
+            }
             await _deckRepository.DeleteDeckAsync(deck);
         }
 
-        public async Task<Deck> GetDeckByIdAsync(int deckId)
+        public async Task<DeckDto> GetDeckByIdAsync(int deckId)
         {
             var deck = await _deckRepository.GetDeckByIdAsync(deckId);
             if (deck == null)
             {
                 throw new Exception("Deck not found.");
             }
-            return deck;
+            return _mapper.MapDeckToDto(deck);
         }
 
-        public async Task<List<Card>> GetDeckDueCardsAsync(int deckId, DateTime dueDateTime)
+        public async Task<List<CardDto>> GetDeckDueCardsAsync(int deckId, DateTime dueDateTime)
         {
             var deck = await _deckRepository.GetDeckByIdAsync(deckId);
             if (deck == null)
@@ -56,10 +72,11 @@ namespace Sprout.Web.Services
             var newCards = (await _deckRepository.GetDeckCardsWithoutReviewAsync(deckId)).ToList();
             var dueCards = (await _deckRepository.GetDeckCardsDueOnAsync(deckId, dueDateTime)).ToList();
             dueCards.AddRange(newCards);
-            return dueCards;
+            List<CardDto> cardDtos = dueCards.Select(card => _mapper.MapCardToDto(card)).ToList();
+            return cardDtos;
         }
 
-        public async Task<DeckReviewSummaryDTO> GetDeckReviewSummaryAsync(int deckId, DateTime dueDateTime)
+        public async Task<DeckReviewSummaryDto> GetDeckReviewSummaryAsync(int deckId, DateTime dueDateTime)
         {
             var deck = await _deckRepository.GetDeckByIdAsync(deckId);
             if (deck == null)
@@ -68,10 +85,10 @@ namespace Sprout.Web.Services
             }
             var newCards = (await _deckRepository.GetDeckCardsWithoutReviewAsync(deckId)).ToList();
             var dueCards = (await _deckRepository.GetDeckCardsDueOnAsync(deckId, dueDateTime)).ToList();
-            var summary = new DeckReviewSummaryDTO
+            var summary = new DeckReviewSummaryDto
             {
                 DeckName = deck.Name,
-                CardReviewSummary = new CardReviewSummaryDTO
+                CardReviewSummary = new CardReviewSummaryDto
                 {
                     New = newCards.Count(),
                     Due = newCards.Count()
@@ -80,15 +97,26 @@ namespace Sprout.Web.Services
             return summary;
         }
 
-        public async Task RemoveCardFromDeckAsync(Deck deck, Card card)
+        public async Task RemoveCardFromDeckAsync(int deckId, int cardId)
         {
+            var deck = await _deckRepository.GetDeckByIdAsync(deckId);
+            var card = await _cardRepository.GetCardByIdAsync(cardId);
+            if (deck == null || card == null)
+            {
+                return;
+            }
             deck.Cards.Remove(card);
             await _deckRepository.UpdateDeckAsync(deck);
             await _deckRepository.SaveAllAsync();
         }
 
-        public async Task RenameDeckAsync(Deck deck, string name)
+        public async Task RenameDeckAsync(int deckId, string name)
         {
+            var deck = await _deckRepository.GetDeckByIdAsync(deckId);
+            if (deck == null)
+            {
+                return;
+            }
             // TODO: validation
             deck.Name = name;
             await _deckRepository.UpdateDeckAsync(deck);

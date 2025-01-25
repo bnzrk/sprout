@@ -17,7 +17,7 @@ namespace Sprout.Web.Controllers
         }
 
         [HttpPost("review")]
-        public async Task<IActionResult> ReviewItem([FromBody] ReviewDTO reviewResult)
+        public async Task<IActionResult> ReviewItem([FromBody] ReviewDto reviewResult)
         {
             if (reviewResult == null || reviewResult.SrsId < 0)
             {

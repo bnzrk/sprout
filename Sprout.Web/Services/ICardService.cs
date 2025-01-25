@@ -5,11 +5,11 @@ namespace Sprout.Web.Services
 {
     public interface ICardService
     {
-        Task<Card> GetCardByIdAsync(int cardId);
-        Task<Card> GetCardbyKanjiAsync(string kanjiLiteral);
-        Task<List<Card>> GetDueCardsAsync(DateTime dueDateTime);
+        Task<CardDto> GetCardByIdAsync(int cardId);
+        Task<CardDto> GetCardByKanjiAsync(string kanjiLiteral);
+        Task<List<CardDto>> GetDueCardsAsync(DateTime dueDateTime);
         Task CreateCardAsync(string kanjiLiteral);
-        Task DeleteCardAsync(Card card);
-        Task<CardReviewSummaryDTO> GetReviewSummaryAsync(DateTime dueDateTime);
+        Task DeleteCardAsync(int cardId);
+        Task<CardReviewSummaryDto> GetReviewSummaryAsync(DateTime dueDateTime);
     }
 }

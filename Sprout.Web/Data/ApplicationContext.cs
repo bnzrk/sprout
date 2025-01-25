@@ -12,15 +12,17 @@ namespace Sprout.Web.Data
             _config = config;
         }
 
-        private readonly IConfiguration _config;
-
         public DbSet<Kanji> Kanji { get; set; }
         public DbSet<SrsData> SrsData { get; set; }
         public DbSet<Card> Cards { get; set; }
         public DbSet<Deck> Decks { get; set; }
 
+        private readonly IConfiguration _config;
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            base.OnConfiguring(optionsBuilder);
+
             base.OnConfiguring(optionsBuilder);
 
             optionsBuilder.UseSqlServer(_config["ConnectionStrings:DefaultConnection"]);
@@ -28,11 +30,11 @@ namespace Sprout.Web.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(modelBuilder); 
 
-            modelBuilder.Entity<Kanji>()
-                .HasIndex(k => k.Literal)
-                .IsUnique();
+            //modelBuilder.Entity<Kanji>()
+            //    .HasIndex(k => k.Literal)
+            //    .IsUnique();
 
             modelBuilder.Entity<Card>()
                 .HasMany(c => c.Decks)
@@ -41,7 +43,7 @@ namespace Sprout.Web.Data
                     "CardDeck",
                     l => l.HasOne(typeof(Deck)).WithMany().HasForeignKey("DecksId").HasPrincipalKey(nameof(Deck.Id)),
                     r => r.HasOne(typeof(Card)).WithMany().HasForeignKey("CardsId").HasPrincipalKey(nameof(Card.Id)),
-                    j => j.HasKey("CardsId", "TagsId"))
+                    j => j.HasKey("CardsId", "DecksId"))
                 .HasIndex(c => new { c.Kanji, c.UserId })
                 .IsUnique();
         }

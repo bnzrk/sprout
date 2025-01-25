@@ -31,7 +31,7 @@ namespace Sprout.Tests.UnitTests.Controllers
             // Arrange
             var mockSrsService = new Mock<ISrsService>();
             var srsController = new SrsController(mockSrsService.Object);
-            var review = new ReviewDTO
+            var review = new ReviewDto
             {
                 SrsId = -1,
                 IsCorrect = true
@@ -49,7 +49,7 @@ namespace Sprout.Tests.UnitTests.Controllers
         public async Task ReviewItem_ValidReview_ReturnsOk()
         {
             // Arrange
-            var review = new ReviewDTO
+            var review = new ReviewDto
             {
                 SrsId = 1,
                 IsCorrect = true
@@ -73,7 +73,7 @@ namespace Sprout.Tests.UnitTests.Controllers
         public async Task ReviewItem_ServiceThrowsException_ReturnsInternalServerError()
         {
             // Arrange
-            var review = new ReviewDTO
+            var review = new ReviewDto
             {
                 SrsId = 1,
                 IsCorrect = false

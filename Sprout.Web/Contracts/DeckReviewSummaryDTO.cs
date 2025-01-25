@@ -1,8 +1,8 @@
 ﻿namespace Sprout.Web.Contracts
 {
-    public class DeckReviewSummaryDTO
+    public class DeckReviewSummaryDto
     {
         required public string DeckName { get; set; }
-        required public CardReviewSummaryDTO CardReviewSummary { get; set; }
+        required public CardReviewSummaryDto CardReviewSummary { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Sprout.Web.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Sprout.Web.Controllers
 {
@@ -17,19 +18,25 @@ namespace Sprout.Web.Controllers
             _cardService = cardService;
         }
 
+        //[Authorize]
         [HttpPost("{name}")]
         public async Task<IActionResult> CreateDeck(string name)
         {
-            // TODO: Use auth token to get user from user microservice
-            string userId = "";
+            var userId = "test-user-id";
+            //var userId = User.FindFirst("userId")?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized();
+            }
+
             int deckId = await _deckService.CreateDeckAsync(userId, name);
             return CreatedAtAction(nameof(GetDeck), new { id = deckId }, null);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetDeck(int id)
+        [HttpGet("{deckId}")]
+        public async Task<IActionResult> GetDeck(int deckId)
         {
-            var deck = await _deckService.GetDeckByIdAsync(id);
+            var deck = await _deckService.GetDeckByIdAsync(deckId);
             if (deck == null)
             {
                 return NotFound();
@@ -37,12 +44,12 @@ namespace Sprout.Web.Controllers
             return Ok(deck);
         }
 
-        [HttpGet("{id}/due")]
-        public async Task<IActionResult> GetDeckDueCards(int id)
+        [HttpGet("{deckId}/due")]
+        public async Task<IActionResult> GetDeckDueCards(int deckId)
         {
             try
             {
-                var dueCards = await _deckService.GetDeckDueCardsAsync(id, DateTime.Now);
+                var dueCards = await _deckService.GetDeckDueCardsAsync(deckId, DateTime.Now);
                 return Ok(dueCards);
             }
             catch (Exception ex)
@@ -51,14 +58,13 @@ namespace Sprout.Web.Controllers
             }
         }
 
-        [HttpPost("{id}/add/{kanji}")]
-        public async Task<IActionResult> AddCardToDeck(int id, string kanji)
+        [HttpPost("{deckId}/add/{kanji}")]
+        public async Task<IActionResult> AddCardToDeck(int deckId, string kanji)
         {
             try
             {
-                var deck = await _deckService.GetDeckByIdAsync(id);
-                var card = await _cardService.GetCardbyKanjiAsync(kanji);
-                await _deckService.AddCardToDeckAsync(deck, card);
+                var card = await _cardService.GetCardByKanjiAsync(kanji);
+                await _deckService.AddCardToDeckAsync(deckId, card.Id);
                 return Ok("Card added to deck successfully.");
             }
             catch (Exception ex)
@@ -67,14 +73,13 @@ namespace Sprout.Web.Controllers
             }
         }
 
-        [HttpDelete("{id}/remove/{kanji}")]
-        public async Task<IActionResult> RemoveCardFromDeck(int id, string kanji)
+        [HttpDelete("{deckId}/remove/{kanji}")]
+        public async Task<IActionResult> RemoveCardFromDeck(int deckId, string kanji)
         {
             try
             {
-                var deck = await _deckService.GetDeckByIdAsync(id);
-                var card = await _cardService.GetCardbyKanjiAsync(kanji);
-                await _deckService.RemoveCardFromDeckAsync(deck, card);
+                var card = await _cardService.GetCardByKanjiAsync(kanji);
+                await _deckService.RemoveCardFromDeckAsync(deckId, card.Id);
                 return Ok("Card removed from deck successfully.");
             }
             catch (Exception ex)
@@ -83,13 +88,12 @@ namespace Sprout.Web.Controllers
             }   
         }
 
-        [HttpPut("{id}/rename/{name}")]
-        public async Task<IActionResult> RenameDeck(int id, string name)
+        [HttpPut("{deckId}/rename/{name}")]
+        public async Task<IActionResult> RenameDeck(int deckId, string name)
         {
             try
             {
-                var deck = await _deckService.GetDeckByIdAsync(id);
-                await _deckService.RenameDeckAsync(deck, name);
+                await _deckService.RenameDeckAsync(deckId, name);
                 return StatusCode(204, "Deck created successfully.");
             }
             catch (Exception ex)
@@ -99,12 +103,12 @@ namespace Sprout.Web.Controllers
             
         }
 
-        [HttpGet("{id}/review-summary")]
-        public async Task<IActionResult> GetDeckReviewSummary(int id)
+        [HttpGet("{deckId}/review-summary")]
+        public async Task<IActionResult> GetDeckReviewSummary(int deckId)
         {
             try
             {
-                var summary = await _deckService.GetDeckReviewSummaryAsync(id, DateTime.Now);
+                var summary = await _deckService.GetDeckReviewSummaryAsync(deckId, DateTime.Now);
                 if (summary == null)
                 {
                     return NotFound();

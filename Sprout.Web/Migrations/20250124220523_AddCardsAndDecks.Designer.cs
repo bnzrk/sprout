@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sprout.Web.Data;
 
@@ -11,9 +12,11 @@ using Sprout.Web.Data;
 namespace Sprout.Web.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class KanjiContextModelSnapshot : ModelSnapshot
+    [Migration("20250124220523_AddCardsAndDecks")]
+    partial class AddCardsAndDecks
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,7 +63,7 @@ namespace Sprout.Web.Migrations
 
                     b.Property<string>("Literal")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.PrimitiveCollection<string>("Meanings")
                         .IsRequired()
@@ -78,6 +81,9 @@ namespace Sprout.Web.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Literal")
+                        .IsUnique();
 
                     b.ToTable("Kanji");
                 });
@@ -147,7 +153,7 @@ namespace Sprout.Web.Migrations
                     b.Property<bool>("IsMastered")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime?>("LastReview")
+                    b.Property<DateTime?>("LastReviewed")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("NextReview")

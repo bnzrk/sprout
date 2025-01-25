@@ -46,6 +46,7 @@ namespace Sprout.Web.Data.Importers
                         Meanings = c.Element("reading_meaning")
                             ?.Elements("rmgroup")
                             ?.Elements("meaning")
+                            .Where(e => e.Attribute("m_lang") == null)
                             .Select(e => e.Value)
                             .ToList() ?? new List<string>(),
                         OnReadings = c.Element("reading_meaning")
