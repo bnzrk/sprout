@@ -16,11 +16,11 @@ namespace Sprout.Web.Services
             _mapper = mapper;
         }
 
-        public async Task CreateCardAsync(string kanjiLiteral)
+        public async Task CreateCardAsync(string userId, string kanjiLiteral)
         {
             var card = new Card
             {
-                UserId = "test-user-id",
+                UserId = userId,
                 Kanji = kanjiLiteral,
                 SrsData = new SrsData()
             };
@@ -48,9 +48,9 @@ namespace Sprout.Web.Services
             return _mapper.MapCardToDto(card);
         }
 
-        public async Task<CardDto> GetCardByKanjiAsync(string kanjiLiteral)
+        public async Task<CardDto> GetCardByKanjiAsync(string userId, string kanjiLiteral)
         {
-            var card = await _cardRepository.GetCardByKanjiAsync(kanjiLiteral);
+            var card = await _cardRepository.GetCardByKanjiAsync(userId, kanjiLiteral);
             if (card == null)
             {
                 throw new Exception("Card not found.");
@@ -58,10 +58,10 @@ namespace Sprout.Web.Services
             return _mapper.MapCardToDto(card);
         }
 
-        public async Task<List<CardDto>> GetDueCardsAsync(DateTime dueDateTime)
+        public async Task<List<CardDto>> GetDueCardsAsync(string userId, DateTime dueDateTime)
         {
-            var newCards = (await _cardRepository.GetCardsWithoutReviewAsync()).ToList();
-            var dueCards = (await _cardRepository.GetCardsDueOnAsync(dueDateTime)).ToList();
+            var newCards = (await _cardRepository.GetCardsWithoutReviewAsync(userId)).ToList();
+            var dueCards = (await _cardRepository.GetCardsDueOnAsync(userId, dueDateTime)).ToList();
 
             dueCards.AddRange(newCards);
 
@@ -69,10 +69,10 @@ namespace Sprout.Web.Services
             return cardDtos;
         }
 
-        public async Task<CardReviewSummaryDto> GetReviewSummaryAsync(DateTime dueDateTime)
+        public async Task<CardReviewSummaryDto> GetReviewSummaryAsync(string userId, DateTime dueDateTime)
         {
-            var newCards = (await _cardRepository.GetCardsWithoutReviewAsync()).ToList();
-            var dueCards = (await _cardRepository.GetCardsDueOnAsync(dueDateTime)).ToList();
+            var newCards = (await _cardRepository.GetCardsWithoutReviewAsync(userId)).ToList();
+            var dueCards = (await _cardRepository.GetCardsDueOnAsync(userId,dueDateTime)).ToList();
 
             var summary = new CardReviewSummaryDto
             {

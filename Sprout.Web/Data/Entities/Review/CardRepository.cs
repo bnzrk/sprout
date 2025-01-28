@@ -25,29 +25,30 @@ namespace Sprout.Web.Data.Entities.Review
             return card;
         }
 
-        public async Task<Card> GetCardByKanjiAsync(string kanjiLiteral)
+        public async Task<Card> GetCardByKanjiAsync(string userId,string kanjiLiteral)
         {
             var card = await _context.Cards
                 .Include(c => c.SrsData)
+                .Where(c => c.UserId == userId)
                 .FirstOrDefaultAsync(c => c.Kanji == kanjiLiteral);
             return card;
         }
 
-        public async Task<IEnumerable<Card>> GetCardsDueOnAsync(DateTime dueDateTime)
+        public async Task<IEnumerable<Card>> GetCardsDueOnAsync(string userId, DateTime dueDateTime)
         {
             var cards = await _context.Cards
             .Include(c => c.SrsData)
-            .Where(c => c.SrsData.NextReview <= dueDateTime)
+            .Where(c => c.SrsData.NextReview <= dueDateTime && c.UserId == userId)
             .ToListAsync();
 
             return cards;
         }
 
-        public async Task<IEnumerable<Card>> GetCardsWithoutReviewAsync()
+        public async Task<IEnumerable<Card>> GetCardsWithoutReviewAsync(string userId)
         {
             var card = await _context.Cards
                 .Include(c => c.SrsData)
-                .Where(c => c.SrsData.FirstReview == null)
+                .Where(c => c.SrsData.FirstReview == null && c.UserId == userId)
                 .ToListAsync();
             return card;
         }

@@ -16,9 +16,16 @@ namespace Sprout.Web.Controllers
             _srsService = srsService;
         }
 
+        //[Authorize]
         [HttpPost("review")]
         public async Task<IActionResult> ReviewItem([FromBody] ReviewDto reviewResult)
         {
+            //var userId = User.FindFirst("userId")?.Value;
+            //if (string.IsNullOrEmpty(userId))
+            //{
+            //    return Unauthorized();
+            //}
+
             if (reviewResult == null || reviewResult.SrsId < 0)
             {
                 return BadRequest("Invalid review.");
@@ -35,9 +42,16 @@ namespace Sprout.Web.Controllers
             }
         }
 
+        //[Authorize]
         [HttpGet("{srsId}")]
         public async Task<IActionResult> GetSrsData(int srsId)
         {
+            //var userId = User.FindFirst("userId")?.Value;
+            //if (string.IsNullOrEmpty(userId))
+            //{
+            //    return Unauthorized();
+            //}
+
             var srsData = await _srsService.GetSrsDataByIdAsync(srsId);
             if (srsData == null)
             {
