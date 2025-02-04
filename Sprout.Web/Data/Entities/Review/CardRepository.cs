@@ -39,9 +39,18 @@ namespace Sprout.Web.Data.Entities.Review
             var cards = await _context.Cards
             .Include(c => c.SrsData)
             .Where(c => c.SrsData.NextReview <= dueDateTime && c.UserId == userId)
+            .AsNoTracking()
             .ToListAsync();
 
             return cards;
+        }
+
+        public async Task<int> GetCardsDueOnCountAsync(string userId, DateTime dueDateTime)
+        {
+            return await _context.Cards
+                .Include(c => c.SrsData)
+                .Where(c => c.SrsData.NextReview <= dueDateTime && c.UserId == userId)
+                .CountAsync();
         }
 
         public async Task<IEnumerable<Card>> GetCardsWithoutReviewAsync(string userId)
@@ -49,8 +58,17 @@ namespace Sprout.Web.Data.Entities.Review
             var card = await _context.Cards
                 .Include(c => c.SrsData)
                 .Where(c => c.SrsData.FirstReview == null && c.UserId == userId)
+                .AsNoTracking()
                 .ToListAsync();
             return card;
+        }
+
+        public async Task<int> GetCardsWithoutReviewCountAsync(string userId)
+        {
+            return await _context.Cards
+                .Include(c => c.SrsData)
+                .Where(c => c.SrsData.FirstReview == null && c.UserId == userId)
+                .CountAsync();
         }
 
         public async Task<bool> SaveAllAsync()

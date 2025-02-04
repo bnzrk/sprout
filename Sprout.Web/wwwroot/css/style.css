@@ -55,6 +55,11 @@ body
     color: var(--soft-black-color)
 }
 
+a
+{
+    text-decoration: none;
+}
+
 .card
 {
     width: 100%;
@@ -62,6 +67,11 @@ body
     background-color: var(--main-card-color);
     box-shadow: 0 4px 6px var(--main-shadow-color);
     border-radius: 6px;
+}
+
+.bold
+{
+    font-weight: bold;
 }
 
 .navbar-container
@@ -324,12 +334,18 @@ button
 
 .review-preview
 {
+    font-family: "Inter", sans-serif;
     padding: 8px 22px 8px 22px;
     background-color: var(--main-bg-color);
     border-radius: 9999px;
     width: fit-content;
     height: fit-content;
     /* box-shadow: inset 1px 1px 4px rgba(0, 0, 0, 0.05); */
+}
+
+.text-center
+{
+    text-align: center;
 }
 
 .deck-name
@@ -428,6 +444,11 @@ button:hover table
 .deck-list-wrapper th
 {
     color: var(--soft-grey-color);
+    font-weight: 500;
+}
+
+.deck-list-wrapper td
+{
     font-weight: 500;
 }
 

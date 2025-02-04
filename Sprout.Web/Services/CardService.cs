@@ -71,13 +71,12 @@ namespace Sprout.Web.Services
 
         public async Task<CardReviewSummaryDto> GetReviewSummaryAsync(string userId, DateTime dueDateTime)
         {
-            var newCards = (await _cardRepository.GetCardsWithoutReviewAsync(userId)).ToList();
-            var dueCards = (await _cardRepository.GetCardsDueOnAsync(userId,dueDateTime)).ToList();
-
+            var newCount = await _cardRepository.GetCardsWithoutReviewCountAsync(userId);
+            var dueCount = await _cardRepository.GetCardsDueOnCountAsync(userId, dueDateTime);
             var summary = new CardReviewSummaryDto
             {
-                New = newCards.Count,
-                Due = dueCards.Count
+                New = newCount,
+                Due = dueCount
             };
 
             return summary;

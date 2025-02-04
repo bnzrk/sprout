@@ -1,4 +1,5 @@
-﻿@{
+﻿@model HomeViewModel
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -7,12 +8,13 @@
         <div class="deck-list">
             <div class="row soft-grey-color">
                 <span>
-                    <div class="font-noto review-greeting row">
+                    <div id="greeting" class="font-noto review-greeting row">
                         おはよう!
                     </div>
                     <div class="review-header">What would you like to study?</div>
                 </span>
             </div>
+            <!-- All -->
             <button class="review-all row accent-bg card">
                 <h1 class="white-color">Review All</h1>
                 <table class="review-preview">
@@ -22,13 +24,21 @@
                         <th>Due</th>
                     </tr>
                     <tr>
-                        <td class="review-new">10</td>
+                        <td class="review-new">@Model.CardReviewSummary.New</td>
                         <td class="light-grey-color">0</td>
-                        <td class="review-due">20</td>
+                        <td class="review-due">@Model.CardReviewSummary.Due</td>
                     </tr>
                 </table>
             </button>
-            <div class="deck-item card">
+            <!-- Decks -->
+            @if (Model.DeckReviewSummaries.Count == 0)
+            {
+                <br />
+                <p class="light-grey-color text-center">You don't have any decks yet. Create one <a href="#" class="bold accent-color">here</a>.</p>
+            }
+            else
+            {
+                <div class="deck-item card">
                 <div class="deck-item-left row">
                     <div class="deck-name">Deck Name</div>
                     <div class="row gap-10">
@@ -73,6 +83,20 @@
                     Review
                 </button>
             </div>
+            }
         </div>
     </div>
 </div>
+
+<script>
+    // Adjust greeting based on current time
+    var greeting = document.getElementById("greeting");
+    
+    let now = new Date();
+    if (now.getHours() < 10)
+        greeting.textContent = "おはよう!";
+    else if (now.getHours() < 17) 
+        greeting.textContent = "こんにちは!"; 
+    else
+        greeting.textContent = "こんばんは!";
+</script>
