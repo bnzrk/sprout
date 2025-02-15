@@ -26,17 +26,20 @@ namespace Sprout.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var response = await _httpClient.GetAsync("api/v1/cards/review-summary");
-            if (!response.IsSuccessStatusCode)
+            var cardResponse = await _httpClient.GetAsync("api/v1/cards/review-summary");
+            var deckResponse = await _httpClient.GetAsync("api/v1/decks/review-summary");
+            if (!cardResponse.IsSuccessStatusCode || !deckResponse.IsSuccessStatusCode)
             {
-                Console.WriteLine("Failed to get summary.");
+                Console.WriteLine("Failed to get summaries.");
                 return View();
             }
 
-            var cardSummary = await response.Content.ReadFromJsonAsync<CardReviewSummaryDto>(_jsonSerializerOptions);
+            var cardSummary = await cardResponse.Content.ReadFromJsonAsync<CardReviewSummaryDto>(_jsonSerializerOptions);
+            var deckSummary = await deckResponse.Content.ReadFromJsonAsync<List<DeckReviewSummaryDto>>(_jsonSerializerOptions);
             var model = new HomeViewModel
             {
-                CardReviewSummary = cardSummary
+                CardReviewSummary = cardSummary,
+                DeckReviewSummaries = deckSummary
             };
 
             return View(model);

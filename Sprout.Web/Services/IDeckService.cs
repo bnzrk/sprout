@@ -12,6 +12,7 @@ namespace Sprout.Web.Services
         Task AddCardToDeckAsync(int deckId, int cardId);
         Task RemoveCardFromDeckAsync(int deckId, int cardId);
         Task<DeckReviewSummaryDto> GetDeckReviewSummaryAsync(int deckId, DateTime dueDateTime);
+        Task<List<DeckReviewSummaryDto>> GetDeckReviewSummariesAsync(string userId, DateTime dateTime);
         Task<List<CardDto>> GetDeckDueCardsAsync(int deckId, DateTime dueDateTime);
     }
 }

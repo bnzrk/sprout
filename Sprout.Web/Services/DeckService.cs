@@ -76,6 +76,11 @@ namespace Sprout.Web.Services
             return cardDtos;
         }
 
+        public Task<List<DeckReviewSummaryDto>> GetDeckReviewSummariesAsync(string userId, DateTime dueDateTime)
+        {
+            return _deckRepository.GetDeckReviewSummariesAsync(userId, dueDateTime);
+        }
+
         public async Task<DeckReviewSummaryDto> GetDeckReviewSummaryAsync(int deckId, DateTime dueDateTime)
         {
             var deck = await _deckRepository.GetDeckByIdAsync(deckId);

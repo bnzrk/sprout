@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
+using Sprout.Web.Contracts;
 using Z.EntityFramework.Plus;
 
 namespace Sprout.Web.Data.Entities.Review
@@ -52,6 +53,23 @@ namespace Sprout.Web.Data.Entities.Review
                 .Where(c => c.SrsData.FirstReview == null)
                 .ToListAsync();
             return cards;
+        }
+
+        public Task<List<DeckReviewSummaryDto>> GetDeckReviewSummariesAsync(string userId, DateTime dueDateTime)
+        {
+            var deckSummaries = _context.Decks
+                .Where(d => d.UserId == userId)
+                .Select(deck => new DeckReviewSummaryDto
+                {
+                    DeckName = deck.Name,
+                    CardReviewSummary = new CardReviewSummaryDto
+                    {
+                        Due = deck.Cards.Count(c => c.SrsData.NextReview <= dueDateTime),
+                        New = deck.Cards.Count(c => c.SrsData.FirstReview == null)
+                    }
+                })
+                .ToListAsync();
+            return deckSummaries;
         }
 
         public async Task<bool> SaveAllAsync()

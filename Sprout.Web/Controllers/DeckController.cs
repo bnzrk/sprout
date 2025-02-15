@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Sprout.Web.Services;
 using Microsoft.AspNetCore.Authorization;
+using Sprout.Web.Contracts;
 
 namespace Sprout.Web.Controllers
 {
@@ -156,6 +157,44 @@ namespace Sprout.Web.Controllers
                     return NotFound();
                 }
                 return Ok(summary);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("review-summary")]
+        public async Task<IActionResult> GetDeckReviewSummaries()
+        {
+            try
+            {
+                //var userId = User.FindFirst("userId")?.Value;
+                //if (string.IsNullOrEmpty(userId))
+                //{
+                //    return Unauthorized();
+                //}
+
+                var userId = "test-user-id";
+                //var userId = User.FindFirst("userId")?.Value;
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return Unauthorized();
+                }
+
+                try
+                {
+                    var summaries = await _deckService.GetDeckReviewSummariesAsync(userId, DateTime.Now);
+                    if (summaries == null)
+                    {
+                        return NotFound();
+                    }
+                    return Ok(summaries);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
             }
             catch (Exception ex)
             {

@@ -38,51 +38,24 @@
             }
             else
             {
-                <div class="deck-item card">
-                <div class="deck-item-left row">
-                    <div class="deck-name">Deck Name</div>
-                    <div class="row gap-10">
-                        <div class="review-preview">
-                            <span class="review-new"> 12 </span>
-                            <span class="light-grey-color"> 0 </span>
-                            <span class="review-due"> 12 </span>
+                @foreach (var deck in Model.DeckReviewSummaries)
+                {
+                    <div class="deck-item card">
+                        <div class="deck-item-left row">
+                        <div class="deck-name">@deck.DeckName</div>
+                        <div class="row gap-10">
+                            <div class="review-preview">
+                                <span class="review-new"> @deck.CardReviewSummary.New</span>
+                                <span class="light-grey-color"> 0 </span>
+                                <span class="review-due"> @deck.CardReviewSummary.Due</span>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <button class="deck-item-right" type="button">
-                    Review
-                </button>
-            </div>
-            <div class="deck-item card">
-                <div class="deck-item-left row">
-                    <div class="deck-name">Deck Name</div>
-                    <div class="row gap-10">
-                        <div class="review-preview">
-                            <span class="review-new"> 12 </span>
-                            <span class="light-grey-color"> 0 </span>
-                            <span class="review-due"> 12 </span>
                         </div>
+                        <button class="deck-item-right" type="button">
+                            Review
+                        </button>
                     </div>
-                </div>
-                <button class="deck-item-right" type="button">
-                    Review
-                </button>
-            </div>
-            <div class="deck-item card">
-                <div class="deck-item-left row">
-                    <div class="deck-name">Deck Name</div>
-                    <div class="row gap-10">
-                        <div class="review-preview">
-                            <span class="review-new"> 12 </span>
-                            <span class="light-grey-color"> 0 </span>
-                            <span class="review-due"> 12 </span>
-                        </div>
-                    </div>
-                </div>
-                <button class="deck-item-right" type="button">
-                    Review
-                </button>
-            </div>
+                }
             }
         </div>
     </div>

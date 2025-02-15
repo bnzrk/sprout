@@ -9,6 +9,7 @@ using Sprout.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddHttpClient();
 builder.Services.AddScoped<IKanjiRepository, KanjiRepository>();
 builder.Services.AddScoped<IKanjiService, KanjiService>();
 builder.Services.AddScoped<ISrsDataRepository, SrsDataRepository>();
