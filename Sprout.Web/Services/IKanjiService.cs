@@ -1,4 +1,5 @@
-﻿using Sprout.Web.Data.Entities.Kanji;
+﻿using Sprout.Web.Contracts;
+using Sprout.Web.Data.Entities.Kanji;
 
 namespace Sprout.Web.Services
 {
@@ -6,6 +7,7 @@ namespace Sprout.Web.Services
     {
         Task<IEnumerable<Kanji>> GetAllKanjiAsync();
         Task<Kanji> GetKanjiByLiteralAsync(string literal);
+        Task<List<SimpleKanjiDto>> GetKanjiByLiteralsAsync(string[] literals);
         Task<Kanji> GetKanjiByIdAsync(int id);
         Task CreateKanjiAsync(Kanji kanji);
         Task UpdateKanjiAsync(Kanji kanji);

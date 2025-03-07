@@ -1,0 +1,50 @@
+﻿@{
+    ViewData["Title"] = "Review";
+}
+
+@section HeadScripts 
+{
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="~/js/review.js"></script>
+}
+
+<div class="page-content">
+    <div class="review-content">
+        <div id="swipe-card" class="review-card-container">
+            <div class="review-card" id="flippable">
+                <div id="front-kanji" class="review-card-front"><!-- 水 --></div>
+                <div class="review-card-back">
+                    <div class="content">
+                        <div id="readings" class="row gap-10">
+                            <h1 id="back-kanji"><!-- 水 --></h1>
+                            <div id="info" class="column justify-left">
+                                <section class="column justify-left"> 
+                                    <h2>Kun</h2>
+                                    <div id="kun-readings" class="tag-container">
+
+                                    </div>
+                                </section>
+                                <section class="column justify-left">
+                                    <h2>On</h2>
+                                    <div id="on-readings" class="tag-container">
+                                                
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                        <div class="meanings-wrapper">
+                            <section id="meanings" class="tag-container">
+
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="review-menu" class="review-menu">
+    <button id="incorrect-button" class="review-button review-incorrect-bg"><i class="fa-solid fa-xmark"></i></button>
+    <button id="correct-button" class="review-button review-correct-bg"><i class="fa-solid fa-check"></i></button>
+</div>

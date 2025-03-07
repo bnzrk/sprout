@@ -1,5 +1,7 @@
-﻿using Sprout.Web.Data.Entities.Kanji;
+﻿using Sprout.Web.Contracts;
+using Sprout.Web.Data.Entities.Kanji;
 using Sprout.Web.Data.Importers;
+using Sprout.Web.Mappings;
 
 namespace Sprout.Web.Services
 {
@@ -8,11 +10,13 @@ namespace Sprout.Web.Services
 
         private readonly IKanjiRepository _repository;
         private readonly IWebHostEnvironment _environment;
+        private readonly IMapper _mapper;
 
-        public KanjiService(IWebHostEnvironment environment, IKanjiRepository repository)
+        public KanjiService(IWebHostEnvironment environment, IKanjiRepository repository, IMapper mapper)
         {
             _repository = repository;
             _environment = environment;
+            _mapper = mapper;
         }
 
         public async Task CreateKanjiAsync(Kanji kanji)
@@ -44,6 +48,13 @@ namespace Sprout.Web.Services
         public async Task<Kanji> GetKanjiByLiteralAsync(string literal)
         {
             return await _repository.GetKanjiByLiteralAsync(literal);
+        }
+
+        public async Task<List<SimpleKanjiDto>> GetKanjiByLiteralsAsync(string[] literals)
+        {
+            var kanjis = await _repository.GetKanjiByLiteralsAsync(literals);
+            List<SimpleKanjiDto> kanjiDtos = kanjis.Select(kanji => _mapper.MapKanjiToSimpleDto(kanji)).ToList();
+            return kanjiDtos;
         }
 
         public async Task UpdateKanjiAsync(Kanji kanji)

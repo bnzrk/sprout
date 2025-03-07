@@ -11,25 +11,35 @@
                     <div id="greeting" class="font-noto review-greeting row">
                         おはよう!
                     </div>
-                    <div class="review-header">What would you like to study?</div>
+                    @if (@Model.CardReviewSummary.New + @Model.CardReviewSummary.Due != 0)
+                    {
+                        <div class="review-header">What would you like to study?</div>
+                    }
+                    else
+                    {
+                        <div class="review-header">You're all caught up on your reviews!</div>
+                    }
                 </span>
             </div>
             <!-- All -->
-            <button class="review-all row accent-bg card">
-                <h1 class="white-color">Review All</h1>
-                <table class="review-preview">
-                    <tr>
-                        <th>New</th>
-                        <th>Learning</th>
-                        <th>Due</th>
-                    </tr>
-                    <tr>
-                        <td class="review-new">@Model.CardReviewSummary.New</td>
-                        <td class="light-grey-color">0</td>
-                        <td class="review-due">@Model.CardReviewSummary.Due</td>
-                    </tr>
-                </table>
-            </button>
+            @if (@Model.CardReviewSummary.New + @Model.CardReviewSummary.Due != 0)
+            {
+                <button class="review-all row accent-bg card">
+                    <h1 class="white-color">Review All</h1>
+                    <table class="review-preview">
+                        <tr>
+                            <th>New</th>
+                            <th>Learning</th>
+                            <th>Due</th>
+                        </tr>
+                        <tr>
+                            <td class="review-new">@Model.CardReviewSummary.New</td>
+                            <td class="light-grey-color">0</td>
+                            <td class="review-due">@Model.CardReviewSummary.Due</td>
+                        </tr>
+                    </table>
+                </button>
+            }
             <!-- Decks -->
             @if (Model.DeckReviewSummaries.Count == 0)
             {

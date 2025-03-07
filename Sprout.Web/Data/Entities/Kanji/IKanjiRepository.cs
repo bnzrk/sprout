@@ -9,6 +9,7 @@
         Task<IEnumerable<Kanji>> GetAllKanjiAsync();
         Task<Kanji> GetKanjiByIDAsync(int id);
         Task<Kanji> GetKanjiByLiteralAsync(string literal);
+        Task<List<Kanji>> GetKanjiByLiteralsAsync(string[] literals);
         Task<bool> SaveAllAsync();
     }
 }

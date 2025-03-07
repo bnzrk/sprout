@@ -1,6 +1,7 @@
 ﻿using Sprout.Web.Contracts;
 using Sprout.Web.Data.Entities.Srs;
 using Sprout.Web.Data.Entities.Review;
+using Sprout.Web.Data.Entities.Kanji;
 
 namespace Sprout.Web.Mappings
 {
@@ -20,6 +21,17 @@ namespace Sprout.Web.Mappings
         public DeckDto MapDeckToDto(Deck deck)
         {
             return new DeckDto();
+        }
+
+        public SimpleKanjiDto MapKanjiToSimpleDto(Kanji kanji)
+        {
+            return new SimpleKanjiDto
+            {
+                Literal = kanji.Literal,
+                Meanings = kanji.Meanings,
+                KunReadings = kanji.KunReadings,
+                OnReadings = kanji.OnReadings
+            };
         }
 
         public SrsDataDto MapSrsDataToDto(SrsData srsData)

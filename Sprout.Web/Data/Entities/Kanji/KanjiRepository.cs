@@ -35,6 +35,13 @@ namespace Sprout.Web.Data.Entities.Kanji
             return kanji;
         }
 
+        public async Task<List<Kanji>> GetKanjiByLiteralsAsync(string[] literals)
+        {
+            return await _context.Kanji
+                        .Where(k => literals.Contains(k.Literal))
+                        .ToListAsync();
+        }
+
         public async Task<bool> SaveAllAsync()
         {
             return await _context.SaveChangesAsync() > 0;

@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+
+    @RenderSection("HeadScripts", required: false)
 </head>
 <body>
     <div class="page">
@@ -20,10 +22,10 @@
                     </a>
                 </div>
                 <div class="navbar-button-group">
-                    <button id="kanji" class="button circle accent-bg white-color font-noto text-icon main-accent-border"><span>字</span></button>
-                    <!-- <div class="button alt-accent-bg white-color">
+                    <!-- <button id="kanji" class="button circle accent-bg white-color font-noto text-icon main-accent-border"><span>字</span></button> -->
+                    <button class="button accent-bg white-color">
                         <span class="font-noto text-icon">字</span> Kanji
-                    </div> -->
+                    </button>
                     <div class="vertical-divider"></div>
                     <button id="decks" class="button alt-accent-bg white-color alt-accent-border">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 button-icon">

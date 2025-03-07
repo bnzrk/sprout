@@ -29,6 +29,30 @@ namespace Sprout.Web.Controllers
             return Ok(kanji);
         }
 
+        // Returns an array of kanji entries by an array of kanji literals.
+        [HttpPost("batch")]
+        public async Task<IActionResult> GetByLiterals([FromBody] string[] literals)
+        {
+            Console.Write("literals recieved: ");
+            foreach (var l in literals)
+            {
+                Console.WriteLine(l);
+            }
+            if (literals == null || literals.Length == 0)
+            {
+                return BadRequest("Literals array cannot be empty.");
+            }
+
+            var kanjiList = await _kanjiService.GetKanjiByLiteralsAsync(literals);
+
+            if (kanjiList == null || !kanjiList.Any())
+            {
+                return NotFound("No matching kanji found.");
+            }
+
+            return Ok(kanjiList);
+        }
+
         // TEMP: Requests population of the kanji dictionary database
         [HttpPost("populate")]
         public async Task<IActionResult> PopulateDictionary()
